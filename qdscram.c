@@ -68,8 +68,9 @@ void scramble_posix(char* name, char psycho)
 	struct dirent** nmls;
 	int dirsz = scandir(nmbuf, &nmls, fltrper, alphasort);
 	int ran;
-	// Highly unlikely to be in use.
-	char* temp = "DONKEYSTRING!#";
+	char temp [256];
+	snprintf(temp, 255, "%lu", rand());
+	puts(temp);
 	for (int i = 0; i < dirsz; i++) {
 		ran = (rand() % ((dirsz - 1) + 1));
 		strcpy(tmp1, nmls[i]->d_name);
