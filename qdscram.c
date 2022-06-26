@@ -6,6 +6,10 @@
 #include <string.h>
 #include <time.h>
 #include <limits.h>
+
+#if defined (__unix__) || defined (unix) || \
+(defined (__APPLE__) && defined (__MACH__))
+
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -18,7 +22,7 @@ int fltrper(const struct dirent* dp)
 	} else return 1;
 }
 
-void scramble(char* name, char psycho)
+void scramble_posix(char* name, char psycho)
 {
 	/* chdir() ensures I don't have to worry about whether the user
 	 * wrote the path with a / at the end or not.
@@ -81,17 +85,31 @@ void scramble(char* name, char psycho)
 	closedir(dir);
 }
 
+#define SCRAMBLE scramble_posix
+#endif
+
+#if defined (_WIN32) || defined (_WIN64)
+
+#include <windows.h>
+
+void scramble_windows(char* name, char psycho) {
+	puts("Hello from Windows!");
+}
+
+#define SCRAMBLE scramble_windows
+#endif
+
 int main (int argc, char** argv)
 {
 	switch(argc) {
 		case 2:
-			scramble(argv[1], 0);
+			SCRAMBLE(argv[1], 0);
 			break;
 		case 3:
 			if ((strcmp(argv[2], "PSYCHO")) == 0)
-				scramble(argv[1], 1);
+				SCRAMBLE(argv[1], 1);
 			else
-				scramble(argv[1], 0);
+				SCRAMBLE(argv[1], 0);
 			break;
 		default:
 			fputs("USAGE: qdscram [DIRECTORY] [PSYCHOPATH]\n"
