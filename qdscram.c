@@ -116,7 +116,7 @@ int main (int argc, char** argv)
 			fputs("USAGE: qdscram [DIRECTORY] [PSYCHOPATH]\n"
 			"[PSYCHOPATH] - If the third arg is \"PSYCHO\", "
 			"in all caps,\n"
-			"then no backup is made.\n",stderr);
+			"then no backup is made.\n", stderr);
 			exit(EXIT_FAILURE);
 	}
 	return 0;
